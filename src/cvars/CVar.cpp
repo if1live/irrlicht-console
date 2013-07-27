@@ -3,7 +3,7 @@
 #include "cvars/CVar.h"
 
 // Single global instance
-Trie* g_pCVarTrie = NULL;
+Trie* g_pCVarTrie = nullptr;
 
 ////////////////////////////////////////////////////////////////////////////////
 // This can get called many times -- esp when global constructors with defalut
@@ -13,9 +13,9 @@ Trie* g_pCVarTrie = NULL;
 // g_pCVarTrie is allocated.
 void InitCVars()
 {
+	static Trie CVarTrieLocal;
     if( g_pCVarTrie == NULL ){
-        g_pCVarTrie = new Trie();
+		g_pCVarTrie = &CVarTrieLocal;
         g_pCVarTrie->Init();
     }
 }
-

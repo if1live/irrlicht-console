@@ -95,7 +95,8 @@ bool ConsoleLoad( const std::vector<std::string> &vArgs )
 /// Exits program from command line.
 bool ConsoleExit( const std::vector<std::string> &vArgs )
 {
-	exit( 0 );
+	g_console->getDevice()->closeDevice();
+	return true;
 }
 
 ////////////////////////////////////////////////////////////////////////////////
