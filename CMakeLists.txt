@@ -1,0 +1,76 @@
+CMAKE_MINIMUM_REQUIRED( VERSION 2.6 )
+PROJECT( irrlicht_console )
+
+LIST( APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/CMake" )
+INCLUDE( pch_support )
+INCLUDE( compiler_option )
+
+SET( PROJ_SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src )
+SET( PROJ_RES_DIR ${CMAKE_CURRENT_SOURCE_DIR}/res )
+SET( PROJ_EXT_DIR ${CMAKE_CURRENT_SOURCE_DIR}/ext )
+SET( CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/bin" )
+
+IF( APPLE )
+	SET( CMAKE_FIND_ROOT_PATH ${CMAKE_OSX_SYSROOT} )
+ENDIF(  )
+
+MACRO( APPEND_LINK_LIBS )
+	LIST( APPEND PROJ_LINK_LIBS ${ARGN} )
+ENDMACRO( APPEND_LINK_LIBS )
+
+#########################################################
+# Add Irrlight engine
+ADD_SUBDIRECTORY( ${PROJ_EXT_DIR}/irrlicht )
+
+INCLUDE_DIRECTORIES( ${IRRLICHT_INC_DIR} )
+
+APPEND_LINK_LIBS( irrlicht_shared )
+
+#########################################################
+
+# Set Include Path
+INCLUDE_DIRECTORIES( ${PROJ_SRC_DIR} )
+
+IF( MSVC )
+	APPEND_LINK_LIBS( Setupapi winmm )
+ENDIF()
+
+IF( APPLE )
+	LIST( APPEND PROJ_RES_FILES ${PROJ_RES_DIR}/OSX/MainMenu.nib )
+	SET( PROJ_EXE_OPTION MACOSX_BUNDLE )
+ELSE(  )
+ENDIF(  )
+
+# File List
+FILE( GLOB PROJ_SRC_FILES
+    "${PROJ_SRC_DIR}/*.*" )
+FILE( GLOB PROJ_CONSOLE_SRC_FILES 
+	"${PROJ_SRC_DIR}/console/*.*" )
+FILE( GLOB PROJ_CVARS_SRC_FILES 
+	"${PROJ_SRC_DIR}/cvars/*.*" )
+	
+ADD_EXECUTABLE( irrlicht_console 
+	${PROJ_EXE_OPTION}
+	${PROJ_SRC_FILES}
+	${PROJ_CONSOLE_SRC_FILES}
+	${PROJ_RES_FILES}
+	${PROJ_CVARS_SRC_FILES} )
+	
+MSVC_SET_PCH( irrlicht_console
+    "${PROJ_SRC_DIR}/stdafx.h"
+    "${PROJ_SRC_DIR}/stdafx.cpp")
+	
+SOURCE_GROUP( "" FILES ${PROJ_SRC_FILES} )
+SOURCE_GROUP( console FILES ${PROJ_CONSOLE_SRC_FILES} )
+SOURCE_GROUP( cvars FILES ${PROJ_CVARS_SRC_FILES} )
+
+TARGET_LINK_LIBRARIES( irrlicht_console
+	${PROJ_LINK_LIBS}
+	${IRRLICHT_LINK_LIBS} )
+
+USE_CPP11( TARGET irrlicht_console )
+
+IF( APPLE )
+	# For debug... OSX App bundle find file from app bundle existance path
+	SET_TARGET_PROPERTIES( irrlicht_console PROPERTIES RUNTIME_OUTPUT_DIRECTORY_DEBUG ${CMAKE_CURRENT_SOURCE_DIR} )
+ENDIF(  )

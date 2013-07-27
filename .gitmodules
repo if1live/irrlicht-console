@@ -1,0 +1,3 @@
+[submodule "ext/irrlicht"]
+	path = ext/irrlicht
+	url = https://github.com/omniavinco/irrlicht-cmake
