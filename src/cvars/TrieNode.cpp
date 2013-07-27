@@ -45,7 +45,9 @@ TrieNode::~TrieNode()
     if( m_nNodeType == TRIE_LEAF &&
         m_pNodeData != NULL ) {
         //printf( "Destroying leaf node '%s'\n", m_sLeafText.c_str() );
-        CVarUtils::CVar<int>* pCVar = (CVarUtils::CVar<int>*) m_pNodeData;
+        //something CVarUtils::CVar<std::string> occur meory leak!
+        //CVarUtils::CVar<int>* pCVar = (CVarUtils::CVar<int>*) m_pNodeData;
+        CVarUtils::CVarInteface* pCVar = (CVarUtils::CVarInteface*) m_pNodeData;        
         delete pCVar;
     }
     else {

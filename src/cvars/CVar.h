@@ -237,7 +237,12 @@ namespace CVarUtils {
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace CVarUtils {
-    template <class T> class CVar
+	class CVarInteface {
+	public:
+		virtual ~CVarInteface() {}
+	};
+
+    template <class T> class CVar : public CVarInteface
         {
         public:
             ////////////////////////////////////////////////////////////////////////////////
