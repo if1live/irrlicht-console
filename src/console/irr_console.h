@@ -135,6 +135,8 @@ public:
 	/// enter a full line of text to the log text.
 	void EnterLogLine( const std::string &line, LineProperty prop = LINEPROP_LOG, bool display = true );
 
+	irr::core::rect<irr::s32> GetBackgroundRect() const;
+
 private:
 	//scrolling text up and down in the console
 	void ScrollUp(int pixels);

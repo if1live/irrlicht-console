@@ -269,7 +269,7 @@ IrrConsole::IrrConsole()
 	m_fConsoleBlinkRate( CVarUtils::CreateCVar<float>(    "console.BlinkRate", 4.0f ) ), // cursor blinks per sec
 	m_fConsoleAnimTime( CVarUtils::CreateCVar<float>(     "console.AnimTime", 0.1f ) ),     // time the console animates
 	m_nConsoleMaxHistory( CVarUtils::CreateCVar<int>(     "console.history.MaxHistory", 100 ) ), // max lines ofconsole history
-	m_nConsoleLineSpacing( CVarUtils::CreateCVar<int>(    "console.LineSpacing", 5 ) ), // pixels between lines
+	m_nConsoleLineSpacing( CVarUtils::CreateCVar<int>(    "console.LineSpacing", 2 ) ), // pixels between lines
 	m_nConsoleLeftMargin( CVarUtils::CreateCVar<int>(     "console.LeftMargin", 5 ) ),   // left margin in pixels
 	m_nConsoleVerticalMargin( CVarUtils::CreateCVar<int>( "console.VertMargin", 8 ) ),
 	m_nConsoleMaxLines( CVarUtils::CreateCVar<int>(       "console.MaxLines", 4000 ) ),
@@ -1237,6 +1237,15 @@ bool IrrConsole::Help(const std::vector<std::string> &vArgs)
 
 }
 
+irr::core::rect<s32> IrrConsole::GetBackgroundRect() const
+{
+	//add bottom spacing to console area
+	rect<s32> bgRect(m_ConsoleRect.UpperLeftCorner.X,
+		m_ConsoleRect.UpperLeftCorner.X,
+		m_ConsoleRect.LowerRightCorner.X,
+		m_ConsoleRect.LowerRightCorner.Y + 5);
+	return bgRect;
+}
 
 void IrrConsole::RenderConsole(irr::gui::IGUIEnvironment* guienv, irr::video::IVideoDriver *videoDriver, const irr::u32 deltaMillis)
 {
@@ -1245,7 +1254,8 @@ void IrrConsole::RenderConsole(irr::gui::IGUIEnvironment* guienv, irr::video::IV
 	}
 
 	//draw the bg as per configured color
-	videoDriver->draw2DRectangle(consoleColor, m_ConsoleRect);
+	rect<s32> bgRect = GetBackgroundRect();
+	videoDriver->draw2DRectangle(consoleColor, bgRect);
 
 	int consoleHeight = m_ConsoleRect.getHeight();
 
@@ -1324,10 +1334,11 @@ void IrrConsole::RenderConsole(irr::gui::IGUIEnvironment* guienv, irr::video::IV
 
 void IrrConsole::RenderText(const std::string &text, int x, int y, const irr::video::SColor &color)
 {
+	rect<s32> bgRect = GetBackgroundRect();
 	int lineHeight = m_nTextHeight + m_nConsoleLineSpacing;
 	std::wstring wstr = StringUtil::string2wstring(text);
 	rect<s32> pos(x, y - lineHeight/2, x + m_ConsoleRect.getWidth(), y + lineHeight/2);
-	m_pGuiFont->draw(wstr.c_str(), pos, color, false, false, &m_ConsoleRect);
+	m_pGuiFont->draw(wstr.c_str(), pos, color, false, false, &bgRect);
 }
 
 void IrrConsole::OpenConsole() 
