@@ -39,17 +39,17 @@ void Trie::Init()
     sVarName = "console.VerbosePaddingWidth";
     CVarUtils::CVar<int> *pCVar1 = new CVarUtils::CVar<int>( sVarName, 30 );
     m_pVerboseCVarNamePaddingWidth = pCVar1->m_pVarData;
-    Insert( sVarName, (void *) pCVar1 );
+    Insert( sVarName, pCVar1 );
     //////
     sVarName = "console.CVarIndent";
     CVarUtils::CVar<int> *pCVar2 = new CVarUtils::CVar<int>( sVarName, 0 );
     m_pVerboseCVarNamePaddingWidth = pCVar2->m_pVarData;
-    Insert( sVarName, (void *) pCVar2 );
+    Insert( sVarName, pCVar2 );
     //////
     sVarName = "console.CVarIndentIncr";
     CVarUtils::CVar<int> *pCVar3 = new CVarUtils::CVar<int>( sVarName, 4 );
     m_pVerboseCVarNamePaddingWidth = pCVar3->m_pVarData;
-    Insert( sVarName, (void *) pCVar3 );
+    Insert( sVarName, pCVar3 );
     //////
 }
 
@@ -62,7 +62,7 @@ Trie::~Trie()
 }
 
 ////////////////////////////////////////////////////////////////////////////////
-void Trie::Insert( std::string s, void *dataPtr )
+void Trie::Insert( std::string s, CVarUtils::IVar *dataPtr )
 {
     if( root == NULL ) {
         printf( "ERROR in Trie::Insert, root == NULL!!!!!\n" );

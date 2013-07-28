@@ -23,6 +23,10 @@ enum TrieNodeType
     TRIE_ROOT
 };
 
+namespace CVarUtils {
+    class IVar;
+}
+
 class TrieNode
 {
  public:
@@ -37,7 +41,7 @@ class TrieNode
     void                  PrintToVector( std::vector<std::string> &vec );
     void                  PrintNodeToVector( std::vector<TrieNode*> &vec );
 
-    void*                 m_pNodeData;
+    CVarUtils::IVar*      m_pNodeData;
     std::list<TrieNode*>  m_children;
     TrieNodeType          m_nNodeType;
 

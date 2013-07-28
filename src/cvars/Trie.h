@@ -18,6 +18,9 @@
 #include "CVar.h"
 
 class TrieNode;
+namespace CVarUtils {
+    class IVar;
+}
 
 class Trie
 {
@@ -26,7 +29,7 @@ class Trie
     ~Trie();
     void Init();
     // add string to tree and store data at leaf
-    void         Insert( std::string s, void *data );
+    void         Insert( std::string s, CVarUtils::IVar *data );
     // finds s in the tree and returns the node (may not be a leaf)
     // returns null otherwise
     TrieNode*    FindSubStr( const std::string& s );

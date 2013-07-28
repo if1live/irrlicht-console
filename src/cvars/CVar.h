@@ -237,12 +237,12 @@ namespace CVarUtils {
 
 ////////////////////////////////////////////////////////////////////////////////
 namespace CVarUtils {
-	class CVarInteface {
+	class IVar {
 	public:
-		virtual ~CVarInteface() {}
+		virtual ~IVar() {}
 	};
 
-    template <class T> class CVar : public CVarInteface
+    template <class T> class CVar : public IVar
         {
         public:
             ////////////////////////////////////////////////////////////////////////////////
@@ -394,7 +394,7 @@ namespace CVarUtils {
 #endif
         CVarUtils::CVar<T> *pCVar = new CVarUtils::CVar<T>( 
                 s, val, sHelp, true, pSerialisationFuncPtr, pDeserialisationFuncPtr );
-        g_pCVarTrie->Insert( s, (void *) pCVar );
+        g_pCVarTrie->Insert( s, pCVar );
         return *(pCVar->m_pVarData);
     }
 
